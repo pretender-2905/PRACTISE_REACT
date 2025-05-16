@@ -13,21 +13,37 @@ import Footer from './components/Footer'
 
 
 function App() {
-console.log(useState("muhammd ibrahim"))
+  console.log(useState("muhammd ibrahim"))
   console.log("lampagedata", landingPageData)
   const { header, hero, features, testimonials } = landingPageData
 
   const [userName, setUserName] = useState("Muhammd")
-  // var username = "Muhammad Ibrahim"
-  const handleUpdateUserName = ()=> setUserName("Muahmmad ibrahim najam")
-  console.log("user name from state: ", userName)
-    
+  const [counter, setCounter] = useState(0)
+ 
+// ----------
+  // username function
+  let number = 0
+  // const handleUpdateUserName = () => {
+  //   number++;
+  //   setUserName("Muhammd Ibrahim Najam");
+  //    console.log("number variable in function: ", number)
+  // };
+// -----------
+  // counter function
+  const handleUpdateCounter = () => {
+  setCounter(counter + 1);
+  };
+
+  // console.log("user name from state: ", userName);
+  // console.log("numer variable: ", number);
+
   return (
     <div>
       <Header header={header} />
       <div className='flex justify-center items-center flex-col'>
-        <h2>{userName}</h2>
-        <button onClick={handleUpdateUserName}>Update Username</button>
+        <h2>{counter}</h2>
+        {/* <button onClick={handleUpdateUserName}>Update Username</button> */}
+        <button className='border border-blue-400 p-3' onClick={handleUpdateCounter}>Update counter</button>
       </div>
       <Hero hero={hero} />
       <Features features={features} />
@@ -59,3 +75,5 @@ export default App
 // 1) aik aisa variable banai jo data retain karay between renders(means: keepin the data safe bw renders)
 // 2)  aur aik aisa function banai (i.e state setter function) jo ke value ko upate kary aur react ko trigger kary ke wo component ko re render karay
 
+
+// the use state retu the curent state and sa set fucntoin
