@@ -13,13 +13,22 @@ import Footer from './components/Footer'
 
 
 function App() {
+console.log(useState("muhammd ibrahim"))
   console.log("lampagedata", landingPageData)
   const { header, hero, features, testimonials } = landingPageData
 
+  const [userName, setUserName] = useState("Muhammd")
+  // var username = "Muhammad Ibrahim"
+  const handleUpdateUserName = ()=> setUserName("Muahmmad ibrahim najam")
+  console.log("user name from state: ", userName)
+    
   return (
-
     <div>
       <Header header={header} />
+      <div className='flex justify-center items-center flex-col'>
+        <h2>{userName}</h2>
+        <button onClick={handleUpdateUserName}>Update Username</button>
+      </div>
       <Hero hero={hero} />
       <Features features={features} />
       <Testimonials testimonials={testimonials} />
@@ -31,3 +40,22 @@ function App() {
 }
 
 export default App
+
+
+
+
+
+
+
+//use state is a react hook that lets you add the state variable to your components
+//react hook are simple javascript functions starting with use, here are some built in hooks(usestate, useeffect..) and you can make your own hook
+
+
+// why neeed of use statehook?
+
+// jab hum react mai component re render krty hain to function ke variables ki value reset ho jati hai:
+// to react me value update kr wany ke lia humy 2 kaam krny hain
+
+// 1) aik aisa variable banai jo data retain karay between renders(means: keepin the data safe bw renders)
+// 2)  aur aik aisa function banai (i.e state setter function) jo ke value ko upate kary aur react ko trigger kary ke wo component ko re render karay
+
