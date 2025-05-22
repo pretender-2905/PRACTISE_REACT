@@ -11,6 +11,8 @@ import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
 import ExpenseTracker from './components/ExpenseTracker'
 
+
+// use state
 function App() {
   console.log(useState("muhammd ibrahim"))
   console.log("lampagedata", landingPageData)
