@@ -8,28 +8,19 @@ function App() {
 
   const [products, setProducts] = useState([])
   const [cartItems, setCartItems] = useState([])
+ 
 
 
   useEffect(() => {
     fetchProducts()
   }, [])
 
-  useEffect(() => {
-    console.log("cart items: ", cartItems)
-  }, [cartItems])
 
-  const addCartItems = (item) => {
-    const items = [...cartItems]
-   const itemInd =  items.findIndex((data)=> data.id === item.id )
-    console.log(itemInd)
-    if(itemInd == -1){
 
-      items.push(item)
-      setCartItems([...items])
-
-    }
-  }
-
+  
+useEffect(()=>{
+   console.log("item:", cartItems)
+}, [cartItems])
 
   const fetchProducts = async () => {
     const products = await getAllProducts()
@@ -37,24 +28,38 @@ function App() {
     console.log(products)
   }
 
+  const addCartItems = (item)=>{
+
+    
+    const items = [...cartItems]
+    const itemInd = items.findIndex((data)=> data.id==item.id)
+    console.log(itemInd)
+    if(itemInd == -1){
+      items.push(item)
+      setCartItems([...items])
+    }
+   
+  }
+
   return (
     <div className='containerv'>
      <div className='fixed w-full h-[100px] bg-white flex flex-col sm:flex-row items-center top-0 justify-center sm:justify-center gap-4 sm:gap-10 '>
        <h1 className='text-3xl font-bold text-green-600 text-center  underline'>SHOPPING LIST</h1>
-       <h1 className='text-2xl font-bold text-black-600  '>Cart Items:  {cartItems.length}</h1>
+       <h1 className='text-2xl font-bold text-black-600  '>Cart Items: {cartItems.length}</h1>
      </div>
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-wrap -m-4">
+          <div className="flex flex-wrap -m-4">-
             {
               products.map((data, index) => {
-                const isAddedToCart =  cartItems.findIndex((product)=> product.id === data.id ) !==-1
+              const isAddedToCart = cartItems.findIndex((product)=> product.id==data.id)  !== -1
                 return (
                   <Card
                   isAddedToCart={isAddedToCart}
+                    addToCart={()=> addCartItems(data) }
                     key={data.id}
                     items={data}
-                    addToCart={() => addCartItems(data)} />
+                    />
                 )
               })
             }

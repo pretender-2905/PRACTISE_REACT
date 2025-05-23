@@ -9,7 +9,11 @@ function Card({items, addToCart, isAddedToCart}){
             src={`${images[0]}`}
             alt="blog"
           />
+           
           <div className="p-6">
+            <h1 className="title-font text-lg font-medium text-gray-900">
+              {price}$
+            </h1>
             <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
               {category.name}
             </h2>
@@ -20,10 +24,12 @@ function Card({items, addToCart, isAddedToCart}){
              {description}
             </p>
             <div 
-            onClick={addToCart}
+           
             className="flex items-center flex-wrap cursor-pointer">
-              <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
-               {isAddedToCart ? "Added" : "Add to Cart"}
+              <a
+              onClick={addToCart} 
+              className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
+              {isAddedToCart ? "Added" : "Add To Cart"}
                 <svg
                   className="w-4 h-4 ml-2"
                   viewBox="0 0 24 24"
