@@ -1,4 +1,4 @@
-function Card({items}){
+function Card({items, addToCart, isAddedToCart}){
 
   const  {category, images, description, title, price} =  items
  return(
@@ -19,9 +19,11 @@ function Card({items}){
             <p className="leading-relaxed mb-3">
              {description}
             </p>
-            <div className="flex items-center flex-wrap ">
+            <div 
+            onClick={addToCart}
+            className="flex items-center flex-wrap cursor-pointer">
               <a className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
-               Add to Cart
+               {isAddedToCart ? "Added" : "Add to Cart"}
                 <svg
                   className="w-4 h-4 ml-2"
                   viewBox="0 0 24 24"
