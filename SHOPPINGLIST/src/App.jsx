@@ -16,11 +16,11 @@ function App() {
   }, [])
 
 
-
-  
 useEffect(()=>{
-   console.log("item:", cartItems)
+  console.log("Cart Items: ", cartItems)
 }, [cartItems])
+  
+
 
   const fetchProducts = async () => {
     const products = await getAllProducts()
@@ -28,18 +28,20 @@ useEffect(()=>{
     console.log(products)
   }
 
-  const addCartItems = (item)=>{
+  const addToCartItems = (item)=>{
+   const  items = [...cartItems]
 
-    
-    const items = [...cartItems]
-    const itemInd = items.findIndex((data)=> data.id==item.id)
-    console.log(itemInd)
-    if(itemInd == -1){
+   const itemInd =  items.findIndex((cartItems)=> cartItems.id == item.id)
+   if(itemInd == -1){
+     console.log(itemInd)
       items.push(item)
       setCartItems([...items])
-    }
-   
+
+   }
+
   }
+
+
 
   return (
     <div className='containerv'>
@@ -51,13 +53,15 @@ useEffect(()=>{
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-wrap -m-4">-
             {
+            
               products.map((data, index) => {
-              const isAddedToCart = cartItems.findIndex((product)=> product.id==data.id)  !== -1
+               const isAddedToCart = cartItems.findIndex((cartItem)=> cartItem.id == data.id ) !== -1
+               console.log(isAddedToCart)
                 return (
                   <Card
                   isAddedToCart={isAddedToCart}
-                    addToCart={()=> addCartItems(data) }
                     key={data.id}
+                  addToCart={()=> addToCartItems(data)}
                     items={data}
                     />
                 )
