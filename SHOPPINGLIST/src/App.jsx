@@ -80,6 +80,11 @@ useEffect(()=>{
                   addToCart={()=> addToCartItems(data)}
                     items={data}
                     showRemoveFromCart = {showCartItems == true}
+                    removeFromCart={()=> {
+                      const allOtherItem = cartItems.filter((product)=> product.id !== data.id)
+
+                      setCartItems([...allOtherItem])
+                    }}
                     />
                 )
               })

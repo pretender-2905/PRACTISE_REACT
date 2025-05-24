@@ -1,5 +1,5 @@
 
-function Card({items, addToCart, isAddedToCart, showRemoveFromCart}){
+function Card({items, addToCart, isAddedToCart, showRemoveFromCart, removeFromCart}){
   const  {category, images, description, title, price} =  items
  return(
    <div className="p-4 md:w-1/3">
@@ -47,6 +47,7 @@ function Card({items, addToCart, isAddedToCart, showRemoveFromCart}){
               </a>
               {showRemoveFromCart && (
               <a
+              onClick={removeFromCart}
               className="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">
               
               Remove From Cart
