@@ -18,10 +18,13 @@ function App() {
 
   // for safe in local storage
 
+
+
   useEffect(()=>{
-    const itemsInCart = JSON.parse(localStorage.getItem("cart"))
-    setCartItems([...itemsInCart])
-  },[])
+  const itemsInCart = JSON.parse(localStorage.getItem("cart")) || []
+
+  setCartItems([...itemsInCart])
+},[])
 useEffect(()=>{
   if(cartItems.length){
     localStorage.setItem("cart", JSON.stringify(cartItems))
