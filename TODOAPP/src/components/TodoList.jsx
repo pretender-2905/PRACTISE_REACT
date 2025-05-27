@@ -8,7 +8,7 @@ function TodoList({todos, onDelete,  toggleTodo}){
             <h3 
             onClick={()=> toggleTodo(todo.id)}
             style={{textDecoration: todo.completed && 'line-through'}}
-            className=' cursor-pointer text-left pl-3 py-2 text-2xl font-mono font-medium flex-1' >{todo.todo}</h3>
+            className=' cursor-pointer text-left pl-3 py-2 text-3xl font-bold font-medium flex-1' >{todo.todo}</h3>
             <button 
             onClick={()=> onDelete(todo.id)}
             className=' cursor-pointer bg-red-200 rounded-sm p-2 px-4'>Delete Todo</button>
