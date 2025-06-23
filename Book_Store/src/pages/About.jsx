@@ -8,7 +8,7 @@ function About(){
         ROOF PARTY POLAROID
       </h2>
       <h1 className="sm:text-3xl text-2xl font-medium title-font text-gray-900">
-        Master Cleanse Reliac Heirloom
+       About Us
       </h1>
     </div>
     <div className="flex flex-wrap -m-4">
