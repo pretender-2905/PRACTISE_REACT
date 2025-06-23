@@ -1,7 +1,11 @@
+import { useNavigate } from "react-router-dom"
+
 function Signin(){
+    const navigate = useNavigate()
+     const handleGoBack = () => navigate("/auth")
     return (
-        <div>
-            <>
+        
+        <div>  
   {/* component */}
   {/* Container */}
   <div className="flex flex-col h-screen bg-gray-100">
@@ -74,7 +78,16 @@ function Signin(){
               font-medium text-white uppercase
               focus:outline-none hover:bg-gray-700 hover:shadow-none"
           >
-            Login
+            Sign in
+          </button>
+          <button
+
+          onClick={handleGoBack}
+            className="w-full py-3 mt-10 bg-gray-800 rounded-sm
+              font-medium text-white uppercase
+              focus:outline-none hover:bg-gray-700 hover:shadow-none"
+          >
+            Go Back
           </button>
           {/* Another Auth Routes */}
           <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
@@ -92,8 +105,6 @@ function Signin(){
       </div>
     </div>
   </div>
-</>
-
         </div>
     )
 }
