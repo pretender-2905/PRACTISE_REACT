@@ -9,6 +9,9 @@ import Header from './components/Header'
 import Auth from './pages/Auth'
 import Signin from './pages/Auth/signin'
 import Signup from './pages/Auth/signup'
+import Books from './pages/Book/Books'
+import BookDetail from './pages/Book/BookDetail'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +32,13 @@ function App() {
         <Route path="signin" element={<Signin />}/>
         <Route path='signup' element={<Signup/>}/>
         </Route>
+
+        <Route path='/books'>
+        <Route index element={<Books />}/>
+        <Route path=':title' element={<BookDetail />}/>
+        </Route>
+
+        <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>
   )
