@@ -1,9 +1,13 @@
+import { useContext } from "react"
 import { Link } from "react-router-dom"
+import { ThemeContext } from "../context/ThemeContext"
 
 function Header(){
+
+  const {theme , setTheme} = useContext(ThemeContext)
     return(
         <div>
-            <header className="text-gray-600 body-font">
+            <header className={`${theme == "light" ? "bg-white text-gray-600": "bg-gray-800 text-white" }`}>
   <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
     <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
       <svg
@@ -18,7 +22,7 @@ function Header(){
       >
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
       </svg>
-      <span className="ml-3 text-xl">Tailblocks</span>
+      <span className={`${theme == "light" ? "text-black": "text-white"} ml-3 text-xl`}>Tailblocks</span>
     </a>
     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
       <a className="mr-5 hover:text-gray-900"><Link to={'/'}>Home</Link></a>
@@ -27,8 +31,20 @@ function Header(){
       <a className="mr-5 hover:text-gray-900"><Link to={'notFound'}>Not Found</Link></a>
       <a className="mr-5 hover:text-gray-900"><Link to={'auth'}>Auth</Link></a>
     </nav>
-    <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-      Button
+    <button
+      onClick={()=> 
+      {
+        if(theme == "light"){
+          setTheme("dark")
+        }else{
+          setTheme("light")
+        }
+      }
+      }
+    className=
+      {`${theme == "light" ? "text-black": "text-blue-800" } inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded mt-4 md:mt-0`}>
+      {theme == "light" ? "Make it Dark" : "Make it light"}
+      
       <svg
         fill="none"
         stroke="currentColor"

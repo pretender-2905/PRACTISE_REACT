@@ -11,13 +11,16 @@ import Signin from './pages/Auth/signin'
 import Signup from './pages/Auth/signup'
 import Books from './pages/Book/Books'
 import BookDetail from './pages/Book/BookDetail'
+import ThemeContextProvider from './context/ThemeContext'
+import UserContextProvider from './context/userContext'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return ( 
-
+    <UserContextProvider>
+<ThemeContextProvider>
     <BrowserRouter>
         <Header/>
       <Routes>
@@ -41,6 +44,10 @@ function App() {
         <Route path="*" element={<NotFound />}/>
       </Routes>
     </BrowserRouter>
+
+</ThemeContextProvider>
+    </UserContextProvider>
+
   )
 }
 
