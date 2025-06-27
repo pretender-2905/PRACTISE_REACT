@@ -56,28 +56,32 @@ function App() {
   const [choosen, setChoosen] = useState("")
   const [weatherData, setWeather] = useState(null)
   const [loading, setLoading] = useState(false)
+  const API = "2927b0875c0517f4fabc5a8c1df7bc46"
 
   const handleCityChange = (e) => {
     const city = e.target.value
-    setChoosen(city)    
+    setChoosen(city)
   }
 
-useEffect(()=>{
-  if (!choosen) return;
-  setLoading(true)
- fetch(`https://api.openweathermap.org/data/2.5/weather?q=${choosen}&appid=2927b0875c0517f4fabc5a8c1df7bc46&units=metric`)
-.then((res)=>res.json())
-.then((res)=>{
-  setWeather(res)
-  setLoading(false)
-})
-},[choosen])
+  useEffect(() => {
+    if (!choosen) return;
+    setLoading(true)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${choosen}&appid=${API}&units=metric`)
+      .then((res) => res.json())
+      .then((res) => {
+        setWeather(res)
+        setLoading(false)
+      })
+  }, [choosen])
 
-console.log(weatherData)
+  console.log(weatherData)
 
-const type = weatherData?.weather[0].description
-const temp = Math.round(weatherData?.main.temp) 
-const feelslike = Math.round(weatherData?.main.feels_like) 
+  const type = weatherData?.weather[0].description
+  const temp = Math.round(weatherData?.main.temp)
+  const feelslike = Math.round(weatherData?.main.feels_like)
+  const humidity = Math.round(weatherData?.main.humidity)
+  const pressure = Math.round(weatherData?.main.pressure)
+
 
   return (
     <div>
@@ -99,27 +103,53 @@ const feelslike = Math.round(weatherData?.main.feels_like)
 
         </select>
 
-          <div className='h-80  p-10 bg-gray-200 flex flex-col justifu-center items-center'>
-            {
-              loading?(
-              <div><h1 className=''>Loading...</h1></div> 
+        <div className='h-auto  p-10 bg-gray-200 flex flex-col justifu-center items-center'>
+          {
+            loading ? (
+              <div><h1 className=''>Loading...</h1></div>
             )
-            
+
               :
               (
-               <img 
-            src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png
+                <img
+                  src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png
 `}
-             />)
-            }
+                />)
+          }
 
-            <p className='text-5xl text-black font-bold mb-3'>{type}</p>
-            <p className='text-2xl '>{temp}°C (feels like: {feelslike}°C)</p>
-            <div>
-              <p></p>
+          <p className='text-5xl text-black font-bold mb-3'>{type}</p>
+          <p className='text-2xl '>{temp}°C (feels like: {feelslike}°C)</p>
+
+          <div className='flex flex-row gap-7'>
+            <div className='text-2xl'>
+              <p>Pressure:</p>
+              <p>Humidity:</p>
+              <p>Sunrise:</p>
+              <p>Sunset:</p>
             </div>
-           
+            <div className='text-2xl'>
+              <p>{pressure} hpa</p>
+              <p>{humidity} %</p>
+              <p>{new Date(weatherData?.sys?.sunrise * 1000).toLocaleTimeString('en-PK' ,{
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+              })} AM</p>
+              <p>{new Date(weatherData?.sys?.sunset * 1000).toLocaleTimeString('en-PK', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+              })} PM</p>
+            </div>
           </div>
+
+
+
+
+
+        </div>
 
       </div>
     </div>
@@ -142,7 +172,7 @@ export default App
 //     "Budapest", "Buenos Aires", "Busan", "Cairo", "Calgary", 
 //     "Cali", "Caloocan", "Campinas", "Cape Town", "Caracas", 
 //     "Casablanca", "Changchun", "Changsha", "Chaozhou", "Chengdu", 
-//     "Chennai", "Chicago", "Chittagong", "Chongqing", "Cologne", 
+//     "Chennai", "Chicago", "Chittago0g", "Chongqing", "Cologne", 
 //     "Conakry", "Copenhagen", "Curitiba", "Daegu", "Daejeon", 
 //     "Dakar", "Dalian", "Dallas", "Dar es Salaam", "Delhi", 
 //     "Dhaka", "Dongguan", "Douala", "Dubai", "Durban", 
