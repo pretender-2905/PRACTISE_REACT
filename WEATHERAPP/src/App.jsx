@@ -135,13 +135,13 @@ function App() {
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true
-              })} AM</p>
+              })} </p>
               <p>{new Date(weatherData?.sys?.sunset * 1000).toLocaleTimeString('en-PK', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true
-              })} PM</p>
+              })} </p>
             </div>
           </div>
 
