@@ -3,7 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../utils/firebase";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 function AuthContextProvider({ children }) {
   const [user, setUser] = useState({
@@ -23,8 +23,9 @@ function AuthContextProvider({ children }) {
           photoUrl: user?.photoURL,
           email: user?.email
         }
+        
       });
-      console.log("userrrrrrrrrrrrrr", userInfo)
+     
     } else {
       setUser({
         isLogin: false,

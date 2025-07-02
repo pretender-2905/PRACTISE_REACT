@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -8,10 +8,14 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Button,
+  Avatar,
 } from "@heroui/react";
 import Signin from "../pages/Signin";
 import Signup from "../pages/Signup";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebase";
 export const AcmeLogo = () => {
   return (
     <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -41,8 +45,15 @@ export default function Header() {
     "Log Out",
   ];
 
+  const {user, setUser} = useContext(AuthContext)
+  console.log("user in header", user)
+
+  const handleLogout = async ()=>{
+    await signOut(auth);
+  }
+
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar className="mt-2" onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -71,15 +82,34 @@ export default function Header() {
           </Link>
         </NavbarItem>
       </NavbarContent>
+     
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link to={'/signin'}>Sign In</Link>
-        </NavbarItem>
-        <NavbarItem>
+
+       
+         {
+        user?.isLogin ?(
+        <Avatar src= {user?.userInfo?.photoUrl} size="lg"/>
+         ) : (
+         <NavbarItem>
           <Button as={Link} to={'/signup'} color="primary" href="#" variant="flat">
             Sign Up
           </Button>
+       </NavbarItem>
+        
+     ) }
+      {
+          user?.isLogin ?
+          (
+           <Button color="primary" variant="light" className="text-lg"
+           onClick={handleLogout}
+           >Logout</Button>
+          ):(
+        <NavbarItem >
+          <Link to={'/signin'}>Sign In</Link>
         </NavbarItem>
+
+          )
+        }
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (

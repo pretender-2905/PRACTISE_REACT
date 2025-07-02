@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import {Form, Input, Select, SelectItem, Checkbox, Button} from "@heroui/react";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Sigin() {
+  const [email, setEmail] = useState("")
   const [password, setPassword] = React.useState("");
   const [submitted, setSubmitted] = React.useState(null);
   const [errors, setErrors] = React.useState({});
+  const navigate = useNavigate()
+  const [loader, setLoader] = useState(false)
 
   // Real-time password validation
   const getPasswordError = (value) => {
@@ -71,6 +75,7 @@ export default function Sigin() {
     // The signed-in user info.
     const user = result.user;
     console.log("user=>", user)
+    navigate("/")
     // IdP data available using getAdditionalUserInfo(result)
     // ...
   }).catch((error) => {
@@ -84,6 +89,19 @@ export default function Sigin() {
     console.log("error=>", errorCode, errorMessage)
     // ...
   });
+  }
+
+  const handleSignin = async ()=>{
+try{
+  setLoader(true)
+  await signInWithEmailAndPassword(auth, email, password).then(()=> {
+    navigate('/')
+    setLoader(false)
+  })
+}
+catch{
+
+}
   }
   return (
     <Form
@@ -147,7 +165,10 @@ export default function Sigin() {
              <Button type="reset" variant="bordered" className="w-40">
             Reset
           </Button>
-          <Button className="w-full" color="primary" type="submit">
+          <Button 
+          isLoading = {loader}
+          onClick={handleSignin}
+          className="w-full" color="primary" type="submit">
             Sign In
           </Button>
          
