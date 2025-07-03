@@ -3,19 +3,18 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import ProductCart from "../components/ProductCart"
 import ProductsCategory from "../components/ProductsCategory"
-
 function Products() {
-
     const [products, setProducts] = useState([])
     const [Category, setCategory] = useState([])
     const [loading, setLoading] = useState(true)
-
-
+    const [choosenCategory, setChoosenCategory] = useState("All")
     // products api
     useEffect(() => {
-
+        const url = choosenCategory === "All" 
+        ? "https://dummyjson.com/products" :
+        `https://dummyjson.com/products/category/${choosenCategory}`
         axios
-            .get('https://dummyjson.com/products')
+            .get(url)
             .then((res) => {
                 console.log("DATA=>", res?.data?.products)
                 setProducts(res.data?.products)
@@ -25,9 +24,7 @@ function Products() {
                 console.log("ERROR: ", err)
                 setLoading(false)
             })
-
-    }, [])
-
+    }, [choosenCategory])
     // products cateory api
     useEffect(() => {
 
@@ -43,51 +40,51 @@ function Products() {
             })
 
     }, [])
-
     return (
         <div>
-
             {
                 loading ?
                     (
                         <div className="w-full h-96 flex justify-center items-center">
-                            <Spinner className={{ label: "text-foreground mt-4" }}  label="Please wait..." variant="simple" />
-                            </div>
-                        
+                            <Spinner className={{ label: "text-foreground mt-4" }} label="Please wait..." variant="simple" />
+                        </div>
+
                     ) :
                     (
                         <div>
-                        <div className="flex gap-3 flex-wrap m-6"> 
+                            <div className="flex gap-3 flex-wrap m-6">
 
-                             <ProductsCategory category={ {
+                                <ProductsCategory 
+                                onClick={()=> setChoosenCategory("All")}
+                                isChoosen={choosenCategory === "All"} category={{
                                     slug: "All",
                                     name: "All"
-                                } }  />
-                                
-                            {
-                            Category.map((category)=>(
-                                <ProductsCategory category={category} key={category.slug} />
-                            ))
-                            }
-                        </div>
+                                }} />
 
-                        <div className="flex flex-wrap m-6">
-                           {
-                            products.map((item)=>(
-                                <ProductCart item={item} key={item.id}/>
-                            ))
-                           }
+                                {
+                                    Category.map((category) => (
+                                        <ProductsCategory
+                                            onClick={() => setChoosenCategory(category.slug)}
+                                            isChoosen={category.slug === choosenCategory}
+                                            category={category}
+                                            key={category.slug} />
+                                    ))
+                                }
                             </div>
+
+                            <div className="flex flex-wrap m-6">
+                                {
+                                    products.map((item) => (
+                                        <ProductCart item={item} key={item.id} />
+                                    ))
+                                }
                             </div>
+                        </div>
                     )
             }
-
-
-
         </div>
 
 
     )
 }
-
 export default Products
