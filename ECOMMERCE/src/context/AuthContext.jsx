@@ -23,9 +23,9 @@ function AuthContextProvider({ children }) {
           photoUrl: user?.photoURL,
           email: user?.email
         }
-        
+
       });
-     
+
     } else {
       setUser({
         isLogin: false,
@@ -33,7 +33,7 @@ function AuthContextProvider({ children }) {
       });
     }
     setLoading(false); // fix: there was an undefined variable "initializing"
-    
+
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function AuthContextProvider({ children }) {
     <AuthContext.Provider value={{ user, setUser }}>
       {loading ? (
         <div className="w-full h-96 flex justify-center items-center">
-          <Spinner />
+          <Spinner classNames={{ label: "text-foreground mt-4" }} label="Please wait..." variant="simple" />
         </div>
       ) : (
         children
