@@ -53,7 +53,7 @@ export default function Header() {
   }
 
   return (
-    <Navbar className="mt-2 bg-purple-100" onMenuOpenChange={setIsMenuOpen}>
+    <Navbar className="mt-2 bg-purple-300" onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
