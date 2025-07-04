@@ -8,6 +8,9 @@ function Products() {
     const [Category, setCategory] = useState([])
     const [loading, setLoading] = useState(true)
     const [choosenCategory, setChoosenCategory] = useState("All")
+   
+
+   
     // products api
     useEffect(() => {
         const url = choosenCategory === "All" 
@@ -55,6 +58,7 @@ function Products() {
                             <div className="flex gap-3 flex-wrap m-6">
 
                                 <ProductsCategory 
+                                
                                 onClick={()=> setChoosenCategory("All")}
                                 isChoosen={choosenCategory === "All"} category={{
                                     slug: "All",

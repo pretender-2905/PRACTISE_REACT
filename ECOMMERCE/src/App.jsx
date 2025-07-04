@@ -18,8 +18,10 @@ function App() {
       <Route path='/' element={<Home />}/>
       <Route path='/signin' element={<Signin />}/>
       <Route path='/signup' element={<Signup />}/>
-      <Route path='/products' element={<Products/>}/>
       <Route path='/products/:id' element={<ProductsDetail/>}  />
+      <Route path='/products' element={<Products/>}/>
+        
+      
     </Routes>
     </BrowserRouter>
   )
