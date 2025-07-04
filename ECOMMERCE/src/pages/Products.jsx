@@ -3,11 +3,13 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import ProductCart from "../components/ProductCart"
 import ProductsCategory from "../components/ProductsCategory"
+import { useSearchParams } from "react-router-dom"
 function Products() {
     const [products, setProducts] = useState([])
     const [Category, setCategory] = useState([])
     const [loading, setLoading] = useState(true)
-    const [choosenCategory, setChoosenCategory] = useState("All")
+    const [searchParams , setSearchParams] = useSearchParams()
+    const choosenCategory = searchParams.get("category") || "All"
    
 
    
@@ -59,7 +61,7 @@ function Products() {
 
                                 <ProductsCategory 
                                 
-                                onClick={()=> setChoosenCategory("All")}
+                                onClick={()=> setSearchParams({category: "All"})}
                                 isChoosen={choosenCategory === "All"} category={{
                                     slug: "All",
                                     name: "All"
@@ -68,7 +70,7 @@ function Products() {
                                 {
                                     Category.map((category) => (
                                         <ProductsCategory
-                                            onClick={() => setChoosenCategory(category.slug)}
+                                            onClick={() => setSearchParams({category: category.slug})}
                                             isChoosen={category.slug === choosenCategory}
                                             category={category}
                                             key={category.slug} />
