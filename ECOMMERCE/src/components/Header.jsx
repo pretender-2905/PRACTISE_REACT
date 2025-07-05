@@ -61,7 +61,7 @@ export default function Header() {
         />
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">flyn</p>
         </NavbarBrand>
       </NavbarContent>
 
