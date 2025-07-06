@@ -51,13 +51,16 @@ useEffect(()=>{
         </Button>
       </Box>
 
-      <Box >
-          {
-            Images.map((image)=>{
-              <ImageCart image={image} />
-            })
-          }
-      </Box>
+    <Box>
+      <div className="flex flex-wrap m-4">
+  {
+    Images.map((image) => (
+      <ImageCart image={image} key={image.id} />
+    ))
+  }
+  </div>
+</Box>
+
 
     </div>
 
