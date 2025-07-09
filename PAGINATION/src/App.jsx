@@ -19,11 +19,11 @@ function App() {
 
   // products api
   useEffect(() => {
-     setLoading(true)
+     
     const url = choosenCateory === "All" ? 
     `https://dummyjson.com/products?limit=${limit}&skip=${skip}`:
     `https://dummyjson.com/products/category/${choosenCateory}?limit=${limit}&skip=${skip}`
-   
+   setLoading(true)
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
@@ -117,7 +117,10 @@ console.log("choosen_category ", choosenCateory)
           category.map((category) => (
           
               <ProductCategory
-                onClick={() => setChoosenCategory(category.slug)}
+                onClick={() => {
+                   setSkip(0);
+                   setChoosenCategory(category.slug)
+                }}
                 category={category}
                 key={category.slug}
                 isChoosen={category.slug === choosenCateory}
