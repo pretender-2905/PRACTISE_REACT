@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -9,7 +9,15 @@ import {
   NavbarItem,
   Button,
 } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { ShoppingCartOutlined } from "@mui/icons-material";
+import {Badge} from "antd"
+import { CartContext } from "../context/CartContext";
+
+
 
 export const AcmeLogo = () => {
   return (
@@ -32,7 +40,7 @@ export const AcmeLogo = () => {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
+const navigate = useNavigate()
   const menuItems = [
     { name: "Profile", href: "#", icon: "👤" },
     { name: "Dashboard", href: "#", icon: "📊" },
@@ -53,6 +61,18 @@ export default function Header() {
     { name: "Pricing", href: "#" },
     { name: "Docs", href: "#" },
   ];
+
+  const {user, setUser} = useContext(AuthContext)
+  console.log("user", user)
+
+  const handleLogout = async ()=>{
+    await signOut(auth)
+    navigate("/products")
+  }
+
+  // const [cartItemCount, setCartItemCount] = useState("10")
+  const {cartItems} = useContext(CartContext)
+
 
   return (
     <Navbar
@@ -120,8 +140,25 @@ export default function Header() {
 
       {/* Login & SignUp */}
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link
+        <NavbarItem className="hidden lg:flex justify-center items-center gap-10">
+      <Link to={"/cart"}>
+      <Badge count={cartItems.length} >
+  <ShoppingCartOutlined style={{ fontSize: '37px', color: "white" }} />
+</Badge>
+      </Link>
+
+         {
+          user?.isLogin ? 
+          (
+            <Button 
+            to={"logout"}
+            className=""
+            onClick={handleLogout}>
+              LOGOUT
+            </Button>
+          ):
+          (
+             <Link
             to={"/signin"}
             className={`
               text-white/90 hover:text-white 
@@ -134,9 +171,17 @@ export default function Header() {
           >
             Sign In
           </Link>
+          )
+         }
         </NavbarItem>
         <NavbarItem>
-          <Button
+          {
+            user?.isLogin ?
+            (
+              null
+            ):
+            (
+              <Button
             as={Link}
            to={'/signup'}
             variant="solid"
@@ -151,6 +196,8 @@ export default function Header() {
           >
             Sign Up
           </Button>
+            )
+          }
         </NavbarItem>
       </NavbarContent>
 

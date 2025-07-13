@@ -11,24 +11,76 @@ import {
   IconButton
 } from '@mui/material';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
+ import { signInWithEmailAndPassword , GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import { auth , db} from "../utils/firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+const navigate = useNavigate()
+const provider = new GoogleAuthProvider();
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
+const handleGoogleSignIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-  const handleGoogleSignIn = () => {
-    console.log('Signing in with Google');
-  };
+    // Check if user data exists in Firestore
+    const userRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(userRef);
+
+    // If it's a new user, create Firestore record
+    if (!docSnap.exists()) {
+      await setDoc(userRef, {
+        email: user.email,
+        username: user.displayName,
+        country: "", // You can update later
+        createdAt: new Date()
+      });
+    }
+    
+    alert("Signin with google successfully")
+    console.log("✅ Google login successful", user.email);
+    navigate("/products")
+  } catch (error) {
+    console.error("❌ Google login error", error.message);
+         alert("Signin with google Something went wrong")
+
+  }
+};
+
+ const handleSignin = async (e) => {
+  e.preventDefault(); // prevent form reload
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+   const  user =  userCredential.user;
+    console.log("✅ Login successful:", user.email);
+    alert("Sign in successfully")
+     setEmail('');
+      setPassword('');
+      navigate("/products")
+
+  } catch (error) {
+     setEmail('');
+      setPassword('');
+    alert("User not Found")
+    
+    throw error;
+   
+    
+  }
+};
+
+
 
   return (
     <Box
+   
+    
       sx={{
         marginTop: '30px',
         marginBottom:"30px",
@@ -49,7 +101,7 @@ export default function SignIn() {
             boxShadow: '0 8px 32px rgba(90, 57, 148, 0.1)',
           }}
         >
-          <Box textAlign="center" mb={4}>
+          <Box  textAlign="center" mb={4}>
             <Typography
               variant="h4"
               sx={{
@@ -87,7 +139,7 @@ export default function SignIn() {
 
           <Divider sx={{ my: 3 }}>or</Divider>
 
-          <Box component="form" onSubmit={handleSignIn}>
+          <Box onSubmit={handleSignin} component="form" >
             <TextField
               label="Email"
               fullWidth
@@ -148,6 +200,7 @@ export default function SignIn() {
             </Box>
 
             <Button
+            
               type="submit"
               fullWidth
               variant="contained"

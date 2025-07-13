@@ -11,6 +11,9 @@ export default defineConfig({
         tailwindcss(),
         autoprefixer(),
       ],
+       define: {
+    'process.env': process.env
+  }
     },
   },
 })

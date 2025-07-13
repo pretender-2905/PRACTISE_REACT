@@ -11,21 +11,73 @@ import {
   IconButton
 } from '@mui/material';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
+import { createUserWithEmailAndPassword,  GoogleAuthProvider, signInWithPopup  } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../utils/firebase';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [country, setCountry] = useState('');
+  const [username, setUsername] = useState('');
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const provider = new GoogleAuthProvider();
+
+const handleGoogleSignUp = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Check if user data exists in Firestore
+    const userRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(userRef);
+
+    // If it's a new user, create Firestore record
+    if (!docSnap.exists()) {
+      await setDoc(userRef, {
+        email: user.email,
+        username: user.displayName,
+        country: "", // You can update later
+        createdAt: new Date()
+      });
+    }
+    alert("Signin with google successfully")
+    console.log("✅ Google login successful", user.email);
+        navigate("/products")
+
+  } catch (error) {
+    console.error("❌ Google login error", error.message);
+     alert("Signin with google Something went wrong")
+  }
+};
+
+  const handleSignup = async () => {
+    try {
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCred.user;
+
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        createdAt: new Date(),
+        country,
+        username,
+      });
+
+      alert('Signup successful!');
+      setEmail('');
+      setPassword('');
+      setUsername('');
+      setCountry('');
+          navigate("/products")
+
+    } catch (error) {
+      console.log('Signup Error:', error.message);
+    }
   };
 
-  const handleGoogleSignIn = () => {
-    console.log('Signing in with Google');
-  };
+
+
 
   return (
     <Box
@@ -61,7 +113,7 @@ export default function SignUp() {
               SIGN UP
             </Typography>
             <Typography color="text.secondary">
-              Sign in to access your account
+              Create your account
             </Typography>
           </Box>
 
@@ -69,7 +121,7 @@ export default function SignUp() {
             fullWidth
             variant="outlined"
             startIcon={<Google />}
-            onClick={handleGoogleSignIn}
+            onClick={handleGoogleSignUp}
             sx={{
               py: 1.5,
               mb: 3,
@@ -86,22 +138,15 @@ export default function SignUp() {
 
           <Divider sx={{ my: 3 }}>or</Divider>
 
-          <Box component="form" onSubmit={handleSignIn}>
+          <Box component="form" onSubmit={(e) => { e.preventDefault(); handleSignup(); }}>
             <TextField
               label="Username"
               fullWidth
               margin="normal"
-            //   value={email}
-            //   onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                  '&:hover fieldset': {
-                    borderColor: '#b39ddb',
-                  },
-                },
-              }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
             />
             <TextField
               label="Email"
@@ -110,32 +155,17 @@ export default function SignUp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                  '&:hover fieldset': {
-                    borderColor: '#b39ddb',
-                  },
-                },
-              }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
             />
             <TextField
               label="Country"
               fullWidth
               margin="normal"
-            //   value={country}
-            //   onChange={(e) => setEmail(e.target.value)}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
               required
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                  '&:hover fieldset': {
-                    borderColor: '#b39ddb',
-                  },
-                },
-              }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
             />
-
             <TextField
               label="Password"
               fullWidth
@@ -147,36 +177,14 @@ export default function SignUp() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 2,
-                  '&:hover fieldset': {
-                    borderColor: '#b39ddb',
-                  },
-                },
-              }}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
             />
-
-            <Box textAlign="right" mb={3}>
-              <Button
-                size="small"
-                sx={{
-                  color: '#7b1fa2',
-                  fontWeight: 500,
-                }}
-              >
-                Forgot password?
-              </Button>
-            </Box>
 
             <Button
               type="submit"
@@ -184,7 +192,7 @@ export default function SignUp() {
               variant="contained"
               sx={{
                 py: 1.5,
-                mb: 2,
+                mt: 2,
                 borderRadius: 2,
                 fontWeight: 600,
                 background: 'linear-gradient(to right, #7b1fa2, #4527a0)',
@@ -196,8 +204,6 @@ export default function SignUp() {
               SIGN UP
             </Button>
           </Box>
-
-          
         </Paper>
       </Container>
     </Box>
