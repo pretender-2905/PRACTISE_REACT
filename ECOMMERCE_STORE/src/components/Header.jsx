@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -14,10 +14,8 @@ import { AuthContext } from "../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { ShoppingCartOutlined } from "@mui/icons-material";
-import {Badge} from "antd"
+import { Badge } from "antd";
 import { CartContext } from "../context/CartContext";
-
-
 
 export const AcmeLogo = () => {
   return (
@@ -40,39 +38,61 @@ export const AcmeLogo = () => {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-const navigate = useNavigate()
-  const menuItems = [
-    { name: "Profile", href: "#", icon: "👤" },
-    { name: "Dashboard", href: "#", icon: "📊" },
-    { name: "Activity", href: "#", isHighlighted: true, icon: "🔥" },
-    { name: "Analytics", href: "#", icon: "📈" },
-    { name: "System", href: "#", icon: "⚙️" },
-    { name: "Deployments", href: "#", icon: "🚀" },
-    { name: "My Settings", href: "#", icon: "🔧" },
-    { name: "Team Settings", href: "#", icon: "👥" },
-    { name: "Help & Feedback", href: "#", icon: "❓" },
-    { name: "Log Out", href: "#", isDanger: true, icon: "🚪" },
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const { cartItems } = useContext(CartContext);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/products");
+    setIsMenuOpen(false); // Close menu after logout
+  };
+
+  const mobileMenuItems = [
+    ...(user?.isLogin
+      ? [
+          {
+            name: "Logout",
+            action: handleLogout,
+            isDanger: true,
+            icon: "🚪",
+          },
+        ]
+      : [
+          {
+            name: "Sign In",
+            to: "/signin",
+            icon: "🔑",
+          },
+          {
+            name: "Sign Up",
+            to: "/signup",
+            isHighlighted: true,
+            icon: "✍️",
+          },
+        ]),
+    {
+      name: "Products",
+      to: "/products",
+      icon: "🛍️",
+    },
+    {
+      name: "Cart",
+      to: "/cart",
+      icon: "🛒",
+    },
+    {
+      name: "Checkout",
+      to: "/checkout",
+      icon: "💳",
+    }
   ];
 
   const navItems = [
-    { name: "Features", href: "#" },
-    { name: "Customers", href: "#", isActive: true },
-    { name: "Integrations", href: "#" },
-    { name: "Pricing", href: "#" },
-    { name: "Docs", href: "#" },
+    { name: "Products", to: "/products" },
+    { name: "Cart", to: "/cart" },
+    { name: "Checkout", to: "/checkout" },
   ];
-
-  const {user, setUser} = useContext(AuthContext)
-  console.log("user", user)
-
-  const handleLogout = async ()=>{
-    await signOut(auth)
-    navigate("/products")
-  }
-
-  // const [cartItemCount, setCartItemCount] = useState("10")
-  const {cartItems} = useContext(CartContext)
-
 
   return (
     <Navbar
@@ -116,8 +136,9 @@ const navigate = useNavigate()
       {/* Nav links */}
       <NavbarContent className="hidden sm:flex" justify="center">
         {navItems.map((item) => (
-          <NavbarItem key={item.name} isActive={item.isActive}>
+          <NavbarItem key={item.name}>
             <Link
+              to={item.to}
               className={`
                 text-white/90 hover:text-white 
                 transition-all duration-300
@@ -126,11 +147,9 @@ const navigate = useNavigate()
                 after:w-0 after:h-0.5 after:bg-white
                 after:transition-all after:duration-300
                 hover:after:w-full
-                ${item.isActive ? "after:w-full" : ""}
+                ${window.location.pathname === item.to ? "after:w-full" : ""}
                 px-2 py-1
               `}
-              href={item.href}
-              aria-current={item.isActive ? "page" : undefined}
             >
               {item.name}
             </Link>
@@ -138,92 +157,115 @@ const navigate = useNavigate()
         ))}
       </NavbarContent>
 
-      {/* Login & SignUp */}
+      {/* Cart Icon - Visible on all devices */}
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex justify-center items-center gap-10">
-      <Link to={"/cart"}>
-      <Badge count={cartItems.length} >
-  <ShoppingCartOutlined style={{ fontSize: '37px', color: "white" }} />
-</Badge>
-      </Link>
+        {/* Mobile cart icon */}
+        <NavbarItem className="sm:hidden flex">
+          <Link to={"/cart"}>
+            <Badge count={cartItems.length}>
+              <ShoppingCartOutlined style={{ fontSize: '28px', color: "white" }} />
+            </Badge>
+          </Link>
+        </NavbarItem>
 
-         {
-          user?.isLogin ? 
-          (
+        {/* Desktop cart icon and auth buttons */}
+        <NavbarItem className="hidden sm:flex items-center gap-4">
+          <Link to={"/cart"}>
+            <Badge count={cartItems.length}>
+              <ShoppingCartOutlined style={{ fontSize: '28px', color: "white" }} />
+            </Badge>
+          </Link>
+
+          {user?.isLogin ? (
             <Button 
-            to={"logout"}
-            className=""
-            onClick={handleLogout}>
+              onClick={handleLogout}
+              className="text-sm"
+            >
               LOGOUT
             </Button>
-          ):
-          (
-             <Link
-            to={"/signin"}
-            className={`
-              text-white/90 hover:text-white 
-              px-3 py-1 rounded-full
-              transition-all duration-300
-              hover:bg-white/10
-              border border-transparent
-              hover:border-white/20
-            `}
-          >
-            Sign In
-          </Link>
-          )
-         }
-        </NavbarItem>
-        <NavbarItem>
-          {
-            user?.isLogin ?
-            (
-              null
-            ):
-            (
+          ) : (
+            <>
+              <Link
+                to={"/signin"}
+                className={`
+                  text-white/90 hover:text-white 
+                  px-3 py-1 rounded-full
+                  transition-all duration-300
+                  hover:bg-white/10
+                  border border-transparent
+                  hover:border-white/20
+                  text-sm
+                `}
+              >
+                Sign In
+              </Link>
               <Button
-            as={Link}
-           to={'/signup'}
-            variant="solid"
-            className={`
-              bg-gradient-to-r from-amber-400 to-amber-500
-              hover:from-amber-500 hover:to-amber-600
-              text-white font-medium rounded-full
-              px-6 py-2 shadow-md hover:shadow-lg
-              transform hover:scale-105 active:scale-95
-              transition-all duration-300
-            `}
-          >
-            Sign Up
-          </Button>
-            )
-          }
+                as={Link}
+                to={'/signup'}
+                variant="solid"
+                className={`
+                  bg-gradient-to-r from-amber-400 to-amber-500
+                  hover:from-amber-500 hover:to-amber-600
+                  text-white font-medium rounded-full
+                  px-4 py-1 shadow-md hover:shadow-lg
+                  transform hover:scale-105 active:scale-95
+                  transition-all duration-300
+                  text-sm
+                `}
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </NavbarItem>
       </NavbarContent>
 
-      {/* Mobile menu */}
+      {/* Mobile menu with auth options */}
       <NavbarMenu className="bg-gradient-to-b from-amber-400 to-amber-500">
-        {menuItems.map((item, index) => (
+        {mobileMenuItems.map((item, index) => (
           <NavbarMenuItem key={`${item.name}-${index}`}>
-            <Link
-              className={`
-                w-full py-3 px-4 rounded-lg 
-                transition-all duration-300
-                flex items-center gap-3
-                ${item.isHighlighted
-                  ? "bg-white/20 text-white font-medium shadow-md hover:shadow-lg"
-                  : item.isDanger
-                    ? "text-red-400 hover:bg-red-500/20 hover:text-white"
-                    : "text-white/90 hover:bg-white/10 hover:text-white"
-                }
-                transform hover:translate-x-2
-              `}
-              href={item.href}
-              size="lg"
-            >
-              <span className="text-xl">{item.icon}</span>
-              {item.name}
-            </Link>
+            {item.to ? (
+              <Link
+                to={item.to}
+                className={`
+                  w-full py-3 px-4 rounded-lg 
+                  transition-all duration-300
+                  flex items-center gap-3
+                  ${item.isHighlighted
+                    ? "bg-white/20 text-white font-medium shadow-md hover:shadow-lg"
+                    : item.isDanger
+                      ? "text-red-400 hover:bg-red-500/20 hover:text-white"
+                      : "text-white/90 hover:bg-white/10 hover:text-white"
+                  }
+                  ${window.location.pathname === item.to ? "bg-white/10" : ""}
+                  transform hover:translate-x-2
+                `}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <span className="text-xl">{item.icon}</span>
+                {item.name}
+              </Link>
+            ) : (
+              <button
+                onClick={item.action}
+                className={`
+                  w-full py-3 px-4 rounded-lg 
+                  transition-all duration-300
+                  flex items-center gap-3
+                  ${item.isHighlighted
+                    ? "bg-white/20 text-white font-medium shadow-md hover:shadow-lg"
+                    : item.isDanger
+                      ? "text-red-400 hover:bg-red-500/20 hover:text-white"
+                      : "text-white/90 hover:bg-white/10 hover:text-white"
+                  }
+                  transform hover:translate-x-2
+                  text-left
+                `}
+              >
+                <span className="text-xl">{item.icon}</span>
+                {item.name}
+              </button>
+            )}
           </NavbarMenuItem>
         ))}
       </NavbarMenu>

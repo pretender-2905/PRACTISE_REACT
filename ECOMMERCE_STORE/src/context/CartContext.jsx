@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+import { LocalActivity } from "@mui/icons-material";
+import { createContext, useEffect, useState } from "react";
+import { useFetcher } from "react-router";
 
 
 export const CartContext = createContext()
@@ -6,6 +8,21 @@ export const CartContext = createContext()
 function CartContextProvider({ children }) {
 
     const [cartItems, setCartItems] = useState([])
+    const [ isLoaded, setIsLoaded] = useState(false)
+
+useEffect(()=>{
+    if(isLoaded){
+        localStorage.setItem("cartItems", JSON.stringify(cartItems) )
+    }
+}, [cartItems])
+
+   useEffect(()=>{
+    const itemFromLocalStorage = localStorage.getItem("cartItems")
+    if(itemFromLocalStorage){
+        setCartItems([...JSON.parse(itemFromLocalStorage)])
+        setIsLoaded(true)
+    }
+   }, [])
 
     function addItemToCart(item) {
         // item add nhi hai to add krdo

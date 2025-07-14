@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CartContext } from "../context/CartContext";
 import { ShoppingBagIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
@@ -236,8 +236,10 @@ function ProductsDetail() {
               </div>
 
               {/* Action Buttons */}
+         
               <div
                 className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                   <Link to={"/cart"}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -248,12 +250,13 @@ function ProductsDetail() {
 
                     <ShoppingCartIcon style={{ width: "26px", height: "26px" }} />
 
-                    {/* { isItemAdded(productDetail.id) ?
-                     ` Added (${isItemAdded(productDetail.id).quantity})` : `Add To Cart`} */}
+               Buy Now
                   </div>
+          
 
 
                 </motion.button>
+                </Link >
 
                 <motion.button
                   whileHover={{ scale: 1.02 }}
