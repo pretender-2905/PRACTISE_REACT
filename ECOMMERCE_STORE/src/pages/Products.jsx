@@ -92,17 +92,19 @@ const choosenCategory = searchParams.get("category") || "All"
 
   return (
     <div>
-      <div className="flex gap-2 flex-wrap  items-center p-5">
-
-        <ProductsCategory 
-        onClick={()=> setSearchParams({category:"All"})}
-        isChoosen={choosenCategory === "All"}
-        category={{
-          name: "All",
-          slug: "All"
-        }} />
-        
-        {
+      {/* // In your Products.jsx, modify the ProductsCategory usage like this: */}
+<div className="flex gap-2 flex-wrap items-center p-5">
+  <ProductsCategory 
+    onClick={() => setSearchParams({category:"All"})}
+    isChoosen={choosenCategory === "All"}
+    category={{
+      name: "All",
+      slug: "All"
+    }}
+    categories={["All", ...category]} // Pass all categories for mobile dropdown
+  />
+  
+     {
          category.map((category) => (
           <ProductsCategory
             onClick={() => setSearchParams({category: category.slug})}

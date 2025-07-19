@@ -7,6 +7,7 @@ import SignUp from "./pages/Signup";
 import ProductsDetail from "./pages/productsDetail";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
+// import CheckoutDummy from "./pages/CheckoutDummy";
 
 
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="products/:id" element={<ProductsDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        {/* <Route path="/checkoutDummy" element={<CheckoutDummy />} /> */}
 
       </Routes>
     </BrowserRouter>

@@ -73,7 +73,12 @@ useEffect(()=>{
   
 }
 
-    return <CartContext.Provider value={{ decreaseItemFromCart, cartItems, addItemToCart, removeItemFromCart, isItemAdded }}>{children}</CartContext.Provider>
+ function clearCart() {
+    setCartItems([]);
+    localStorage.removeItem("cartItems");
+  }
+
+    return <CartContext.Provider value={{clearCart, decreaseItemFromCart, cartItems, addItemToCart, removeItemFromCart, isItemAdded }}>{children}</CartContext.Provider>
 }
 
 
