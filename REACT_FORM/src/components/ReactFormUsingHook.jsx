@@ -58,8 +58,8 @@ function ReactFormUsingHook() {
     return (
 
 
-        <div className="flex justify-center items-center h-screen bg-purple-100">
-            <div className="flex flex-col bg-gray-100 shadow-lg max-w-md p-5 w-full border rounded-lg pt-20 pb-20 border-purple-600">
+        <div className="flex justify-center items-center h-screen bg-purple-600">
+            <div className="flex flex-col bg-purple-100 shadow-lg max-w-md p-5 w-full border rounded-lg pt-20 pb-20 border-purple-600">
                 <form
                     className="flex flex-col gap-5"
                     onSubmit={handleSubmit(onSubmit)} >
