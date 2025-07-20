@@ -7,8 +7,9 @@ export const fetchTodos = ()=> new Promise((resolve, reject)=>{
    }, 1000)
 })
 
-export const addTodos = ()=> new Promise((resolve, reject)=>{
+export const addTodos = (todo)=> new Promise((resolve, reject)=>{
     setTimeout(()=>{
-        resolve(todos)
+        todos.push(todo)
+        resolve([...todos])
     }, 1000)
 })
