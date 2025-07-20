@@ -10,11 +10,9 @@ function ProductsDetail() {
   const [productDetail, setProductDetail] = useState({});
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  // const [quantity, setQuantity] = useState(1);
   const { cartItems, addItemToCart, isItemAdded , decreaseItemFromCart} = useContext(CartContext)
   const [loading, setLoading] = useState(true)
-  // const [addQuantity, setAddQuantity] = useState(0)
-  // const [subtractQuantity, setSubtractQuantity] = useState(0)
+ 
 
 
 
