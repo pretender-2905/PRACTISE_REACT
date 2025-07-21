@@ -10,3 +10,9 @@ export const fetchRecipeByCategory = async (id)=>{
           if(!res.ok) throw new Error("Not able to fetch single recipe API")
           return res.json()
 }
+
+export const  fetchRecipeBySearch = async (search)=> {
+  const res = await fetch(`https://dummyjson.com/recipes/search?q=${search}`)
+  if(!res?.ok) throw new Error("Not able to fetch recipe by search")
+  return res.json()
+}
