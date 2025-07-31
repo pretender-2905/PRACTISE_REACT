@@ -5,11 +5,17 @@ import './index.css'
 import App from './App'
 import { HeroUIProvider } from '@heroui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter } from 'react-router'
+import AuthContextProvider from './context/AuthContext'
+import 'flowbite';
+import 'flowbite-react';
 
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <AuthContextProvider>
+  <BrowserRouter>
+  {/* <React.StrictMode> */}
     <HeroUIProvider>
      
         <QueryClientProvider client={queryClient}>
@@ -17,5 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </QueryClientProvider>
       
     </HeroUIProvider>
-  </React.StrictMode>
+  {/* </React.StrictMode> */}
+  </BrowserRouter>
+  </AuthContextProvider>
 )
