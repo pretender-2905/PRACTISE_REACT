@@ -10,22 +10,24 @@ function Login(){
     const handleLogin = (e) => {
        
         e.preventDefault();
-         setLoading(true)
+          setLoading(true)
         const obj = {
             email : e.target[0].value,
             password: e.target[1].value
         }
         axios.post(AppRoutes.login, obj)
         .then((res)=>{
+         
             console.log("response form login => ", res)
             Cookies.set('token', res?.data?.data?.token)
             setUser(res?.data?.data?.user)
+             setLoading(false)
         })
         .catch((err)=>{
             setLoading(false)
             console.log("error from login", err)
         })
-        setLoading(false)
+       
     }
     return(
         <div>
@@ -111,7 +113,7 @@ function Login(){
             type="submit"
             className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           >
-           { setLoading ? "Loading..." : "Sign in"}
+           {loading? "Signing in..." : "Sign in"}
           </button>
           <p className="text-sm font-light text-gray-500 dark:text-gray-400">
             Don’t have an account yet?{" "}
